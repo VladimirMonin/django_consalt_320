@@ -9,5 +9,5 @@ app_name = 'users' # Имя для пространства имён
 urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
-    path('profile/', views.ProfileView.as_view(), name='profile'),
+    path('profile/', views.ProfileNewVisitsListView.as_view(), name='new_visits'),
 ]
