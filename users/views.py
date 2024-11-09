@@ -28,16 +28,35 @@ class LoginView(BaseLoginView):
 class LogoutView(BaseLogoutView):
     next_page = reverse_lazy('main')
 
-class ProfileNewVisitsListView(LoginRequiredMixin, ListView):
+class ProfileVisitsListView(LoginRequiredMixin, ListView):
     model = Visit
     template_name = 'visits_list.html'
     context_object_name = 'visits'
     
     def get_queryset(self):
-        return Visit.objects.filter(status=0)
+        # Получаем тип визита из параметров URL
+        visit_type = self.kwargs.get('visit_type')
+        
+        # Базовый queryset для всех визитов
+        queryset = Visit.objects.all()
+        
+        # Фильтрация визитов в зависимости от типа и установка заголовка страницы
+        if visit_type == 'new':
+            queryset = queryset.filter(status=0)
+            self.page_title = 'Новые заявки'
+        elif visit_type == 'archive':
+            queryset = queryset.filter(status__in=[2, 3])
+            self.page_title = 'Архив заявок'
+        else:
+            self.page_title = 'Все заявки'
+            
+        return queryset
     
     def get_context_data(self, **kwargs):
+        # Получаем базовый контекст от родительского класса
         context = super().get_context_data(**kwargs)
-        context['page_title'] = 'Новые заявки'
+        # Добавляем заголовок страницы в контекст
+        context['page_title'] = self.page_title
+        # Добавляем контекст меню кабинета
         context.update(get_cabinet_menu_context(self.request.path))
         return context

@@ -9,5 +9,7 @@ app_name = 'cabinet' # Имя для пространства имён
 urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
-    path('new-visits/', views.ProfileNewVisitsListView.as_view(), name='new_visits'),
+    path('all-visits/', views.ProfileVisitsListView.as_view(), name='all_visits'),
+    path('new-visits/', views.ProfileVisitsListView.as_view(), {'visit_type': 'new'}, name='new_visits'),
+    path('visit-archive/', views.ProfileVisitsListView.as_view(), {'visit_type': 'archive'}, name='visit_archive'),
 ]
