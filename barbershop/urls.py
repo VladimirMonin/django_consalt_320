@@ -28,7 +28,7 @@ from core.views import (
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('users/', include('users.urls', namespace='users')), # namespace - указываем его из urls.py
+    path('cabinet/', include('users.urls', namespace='users')), # namespace - указываем его из urls.py
     path("", MainView.as_view(), name="main"),
     path("thanks/", ThanksTemplateView.as_view(), name="thanks"),
     path(

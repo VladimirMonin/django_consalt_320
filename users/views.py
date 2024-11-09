@@ -6,10 +6,10 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 CABINET_MENU = [
-    {'title': 'Все заявки', 'url': '/cabinet/visits/', 'icon': 'bi-list-ul', 'active': False},
-    {'title': 'Новые заявки', 'url': '/cabinet/visits/new/', 'icon': 'bi-bell', 'active': False},
-    {'title': 'Архив заявок', 'url': '/cabinet/visits/archive/', 'icon': 'bi-archive', 'active': False},
-    {'title': 'Сменить пароль', 'url': '/cabinet/password/', 'icon': 'bi-key', 'active': False},
+    {'title': 'Все заявки', 'url': '/cabinet/all-visits/', 'icon': 'bi-list-ul', 'active': False},
+    {'title': 'Новые заявки', 'url': '/cabinet/new-visits/', 'icon': 'bi-bell', 'active': False},
+    {'title': 'Архив заявок', 'url': '/cabinet/visit-archive/', 'icon': 'bi-archive', 'active': False},
+    {'title': 'Сменить пароль', 'url': '/cabinet/change-password/', 'icon': 'bi-key', 'active': False},
 ]
 
 def get_cabinet_menu_context(current_url: str) -> dict:
@@ -22,7 +22,7 @@ def get_cabinet_menu_context(current_url: str) -> dict:
 
 class LoginView(BaseLoginView):
     template_name = 'login.html'
-    next_page = reverse_lazy('users:new_visits')
+    next_page = reverse_lazy('cabinet:new_visits')
     redirect_authenticated_user = True
 
 class LogoutView(BaseLogoutView):
