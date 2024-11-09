@@ -1,4 +1,4 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from core.models import Visit
 from django.contrib.auth.views import LoginView as BaseLoginView
 from django.contrib.auth.views import LogoutView as BaseLogoutView
@@ -77,3 +77,21 @@ class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
         context = super().get_context_data(**kwargs)
         context.update(get_cabinet_menu_context(self.request.path))
         return context
+
+
+class VisitDetailView(LoginRequiredMixin, DetailView):
+    model = Visit
+    template_name = 'visit_detail.html'
+    context_object_name = 'visit'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(get_cabinet_menu_context(self.request.path))
+        return context
+
+class VisitDeleteView(LoginRequiredMixin, DeleteView):
+    model = Visit
+    success_url = reverse_lazy('cabinet:all_visits')
+    
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)

@@ -40,14 +40,10 @@
                 <td>{{ visit.get_status_display }}</td>
                 {# Кнопки действий: просмотр, редактирование, удаление #}
                 <td class="d-flex gap-2">
-                    <a href="#" class="btn btn-sm btn-outline-primary">
+                    <a href="{% url 'cabinet:visit_detail' visit.pk %}" class="btn btn-sm btn-outline-primary">
                         <i class="bi bi-eye"></i>
                     </a>
-                    <a href="#" class="btn btn-sm btn-outline-secondary">
-                        <i class="bi bi-pencil"></i>
-                    </a>
-                    {# Форма удаления с подтверждением #}
-                    <form method="post" action="#" class="d-inline" onsubmit="return confirm('Вы уверены?');">
+                    <form method="post" action="{% url 'cabinet:visit_delete' visit.pk %}" class="d-inline" onsubmit="return confirm('Вы уверены?');">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-sm btn-outline-danger">
                             <i class="bi bi-trash"></i>

@@ -13,5 +13,8 @@ urlpatterns = [
     path('new-visits/', views.ProfileVisitsListView.as_view(), {'visit_type': 'new'}, name='new_visits'),
     path('visit-archive/', views.ProfileVisitsListView.as_view(), {'visit_type': 'archive'}, name='visit_archive'),
     path('change-password/', views.ChangePasswordView.as_view(), name='change_password'),
+    path('visit/<int:pk>/', views.VisitDetailView.as_view(), name='visit_detail'),
+    path('visit/<int:pk>/delete/', views.VisitDeleteView.as_view(), name='visit_delete'),
+
 
 ]
