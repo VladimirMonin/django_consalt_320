@@ -1,17 +1,38 @@
+{# Навигационная панель Bootstrap с адаптивным меню #}
 <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">Барбершоп Арбуз</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Переключатель навигации">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav me-auto">
-      {% for item in menu %}
-      <li class="nav-item">
-        <a class="nav-link{% if item.active %} active{% endif %}" href="{{ item.url }}">{{ item.title }}</a>
-      </li>
-      {% endfor %}
-    </ul>
+  <div class="container-fluid">
+    {# Логотип/название сайта с ссылкой на главную страницу #}
+    <a class="navbar-brand" href="/">Барбершоп Арбуз</a>
+    {# Кнопка-бургер для мобильного меню #}
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Переключатель навигации">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+  {# Основное меню навигации #}
+  <ul class="navbar-nav me-auto">
+    {# Цикл для вывода пунктов меню из переменной menu #}
+    {% for item in menu %}
+    <li class="nav-item">
+      {# Ссылка меню с подсветкой активного пункта #}
+      <a class="nav-link{% if item.active %} active{% endif %}" href="{{ item.url }}">{{ item.title }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+  {# Блок авторизации пользователя #}
+  <ul class="navbar-nav">
+    {# Проверка авторизации пользователя #}
+    {% if user.is_authenticated %}
+    <li class="nav-item">
+      {# Ссылка для выхода из аккаунта #}
+      <a class="nav-link" href="{% url 'users:logout' %}">Выйти</a>
+    </li>
+    {% else %}
+    <li class="nav-item">
+      {# Ссылка для входа в аккаунт #}
+      <a class="nav-link" href="{% url 'users:login' %}">Войти</a>
+    </li>
+    {% endif %}
+  </ul>
+</div>
   </div>
-    </div>
-  </nav>
+</nav>
