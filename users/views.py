@@ -4,6 +4,8 @@ from django.contrib.auth.views import LoginView as BaseLoginView
 from django.contrib.auth.views import LogoutView as BaseLogoutView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import PasswordChangeView
+
 
 CABINET_MENU = [
     {'title': 'Все заявки', 'url': '/cabinet/all-visits/', 'icon': 'bi-list-ul', 'active': False},
@@ -63,5 +65,15 @@ class ProfileVisitsListView(LoginRequiredMixin, ListView):
         # Добавляем заголовок страницы в контекст
         context['page_title'] = self.page_title
         # Добавляем контекст меню кабинета
+        context.update(get_cabinet_menu_context(self.request.path))
+        return context
+    
+
+class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
+    template_name = 'change_password.html'
+    success_url = reverse_lazy('cabinet:all_visits')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         context.update(get_cabinet_menu_context(self.request.path))
         return context
