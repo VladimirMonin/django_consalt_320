@@ -13,10 +13,15 @@ CABINET_MENU = [
 ]
 
 def get_cabinet_menu_context(current_url: str) -> dict:
-    menu = CABINET_MENU.copy()
-    for item in menu:
-        if item['url'] == current_url:
-            item['active'] = True
+    menu = []
+    # Создаем новый список, а не модифицируем существующий
+    for item in CABINET_MENU:
+        menu.append({
+            'title': item['title'],
+            'url': item['url'],
+            'icon': item['icon'],
+            'active': item['url'] == current_url
+        })
     return {"cabinet_menu": menu}
 
 

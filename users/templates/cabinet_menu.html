@@ -1,7 +1,7 @@
 <div class="d-grid gap-2 p-3">
     {% for item in cabinet_menu %}
     <a href="{{ item.url }}" 
-       class="btn btn-dark {% if item.active %}active{% endif %} d-flex align-items-center">
+       class="btn {% if item.active %}btn-dark{% else %}btn-secondary{% endif %} d-flex align-items-center">
         <i class="bi {{ item.icon }} me-2"></i>
         {{ item.title }}
     </a>
