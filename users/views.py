@@ -5,14 +5,16 @@ from django.contrib.auth.views import LogoutView as BaseLogoutView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
-from .forms import VisitUpdateForm
+from .forms import VisitUpdateForm, AdminVisitCreateForm
 
 CABINET_MENU = [
     {'title': 'Все заявки', 'url': '/cabinet/all-visits/', 'icon': 'bi-list-ul', 'active': False},
+    {'title': 'Создать заявку', 'url': '/cabinet/create-visit/', 'icon': 'bi-plus-circle', 'active': False},  # Новый пункт
     {'title': 'Новые заявки', 'url': '/cabinet/new-visits/', 'icon': 'bi-bell', 'active': False},
     {'title': 'Архив заявок', 'url': '/cabinet/visit-archive/', 'icon': 'bi-archive', 'active': False},
     {'title': 'Сменить пароль', 'url': '/cabinet/change-password/', 'icon': 'bi-key', 'active': False},
 ]
+
 
 def get_cabinet_menu_context(current_url: str) -> dict:
     menu = []
@@ -104,6 +106,17 @@ class VisitUpdateView(LoginRequiredMixin, UpdateView):
     
     def get_success_url(self):
         return reverse_lazy('cabinet:visit_detail', kwargs={'pk': self.object.pk})
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(get_cabinet_menu_context(self.request.path))
+        return context
+
+class AdminVisitCreateView(LoginRequiredMixin, CreateView):
+    model = Visit
+    form_class = AdminVisitCreateForm
+    template_name = 'visit_create.html'
+    success_url = reverse_lazy('cabinet:all_visits')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
