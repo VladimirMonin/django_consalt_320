@@ -1,5 +1,7 @@
 from django import forms
 from core.models import Visit
+from django.contrib.auth.forms import AuthenticationForm
+
 
 class VisitUpdateForm(forms.ModelForm):
     class Meta:
@@ -23,3 +25,12 @@ class AdminVisitCreateForm(forms.ModelForm):
             'status': forms.Select(attrs={'class': 'form-control'}),
             'comment': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
+
+
+
+class BootstrapAuthenticationForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super(BootstrapAuthenticationForm, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+            field.widget.attrs['placeholder'] = field.label

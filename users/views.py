@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
 from .forms import VisitUpdateForm, AdminVisitCreateForm
-
+from .forms import BootstrapAuthenticationForm
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.views import View
@@ -37,6 +37,7 @@ def get_cabinet_menu_context(current_url: str) -> dict:
 
 class LoginView(BaseLoginView):
     template_name = 'login.html'
+    form_class = BootstrapAuthenticationForm
     next_page = reverse_lazy('cabinet:new_visits')
     redirect_authenticated_user = True
 
