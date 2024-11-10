@@ -23,6 +23,8 @@ from core.views import (
     ServicesByMasterView,
     MainView,
     ThanksTemplateView,
+    ReviewCreateView,
+    ReviewThanksTemplateView,
 
 )
 
@@ -36,6 +38,9 @@ urlpatterns = [
         ServicesByMasterView.as_view(),
         name="get_services_by_master",
     ),
+    path("review/create/", ReviewCreateView.as_view(), name="review_create"),
+    path("review/thanks/", ReviewThanksTemplateView.as_view(), name="review_thanks"),
+
 ]
 
 

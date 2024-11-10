@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 from django.shortcuts import render, redirect
-from .forms import VisitModelForm
+from .forms import VisitModelForm, ReviewModelForm
 from .models import Visit, Master, Service, Review
 from django.http import JsonResponse
 from django.views.generic import (
@@ -21,12 +21,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 MENU = [
-        {'title': 'Главная', 'url': '/', 'active': True},
-        {'title': 'Мастера', 'url': '#masters', 'active': True},
-        {'title': 'Услуги', 'url': '#services', 'active': True},
-        {'title': 'Отзывы', 'url': '#reviews', 'active': True},
-        {'title': 'Запись на стрижку', 'url': '#orderForm', 'active': True},
-    ]
+    {'title': 'Главная', 'url': '/', 'active': True},
+    {'title': 'Мастера', 'url': '#masters', 'active': True},
+    {'title': 'Услуги', 'url': '#services', 'active': True},
+    {'title': 'Отзывы', 'url': '#reviews', 'active': True},
+    {'title': 'Оставить отзыв', 'url': '/review/create/', 'active': True},
+    {'title': 'Запись на стрижку', 'url': '#orderForm', 'active': True},
+]
+
 
 def get_menu_context(menu: list[dict] = MENU):
     return {"menu": menu}
@@ -90,3 +92,11 @@ class ThanksTemplateView(TemplateView):
         context.update(get_menu_context())
         return context
 
+class ReviewCreateView(CreateView):
+    model = Review
+    form_class = ReviewModelForm
+    template_name = 'review_form.html'
+    success_url = reverse_lazy('review_thanks')
+
+class ReviewThanksTemplateView(TemplateView):
+    template_name = "review_thanks.html"
