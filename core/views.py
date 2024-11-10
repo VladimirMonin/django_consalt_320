@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from django.shortcuts import render, redirect
 from .forms import VisitModelForm
-from .models import Visit, Master, Service
+from .models import Visit, Master, Service, Review
 from django.http import JsonResponse
 from django.views.generic import (
     View,
@@ -43,8 +43,18 @@ class MainView(View):
         menu = get_menu_context()
         form = VisitModelForm()
         masters = Master.objects.all()
+        published_reviews = Review.objects.filter(status=3)
 
-        return render(request, "main.html", {"form": form, "masters": masters, **menu})
+        return render(
+            request, 
+            "main.html", 
+            {
+                "form": form, 
+                "masters": masters,
+                "published_reviews": published_reviews,
+                **menu
+            }
+        )
     
 
     def post(self, request):
