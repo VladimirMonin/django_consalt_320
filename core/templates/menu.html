@@ -20,19 +20,19 @@
   </ul>
   {# Блок авторизации пользователя #}
   <ul class="navbar-nav">
-    {# Проверка авторизации пользователя #}
     {% if user.is_authenticated %}
     <li class="nav-item">
-      {# Ссылка для выхода из аккаунта #}
-      <a class="nav-link" href="{% url 'cabinet:logout' %}">Выйти</a>
+        <a class="nav-link" href="{% url 'cabinet:new_visits' %}">{{ user.username }}</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'cabinet:logout' %}">Выйти</a>
     </li>
     {% else %}
     <li class="nav-item">
-      {# Ссылка для входа в аккаунт #}
-      <a class="nav-link" href="{% url 'cabinet:login' %}">Войти</a>
+        <a class="nav-link" href="{% url 'cabinet:login' %}">Войти</a>
     </li>
     {% endif %}
-  </ul>
+</ul>
 </div>
   </div>
 </nav>

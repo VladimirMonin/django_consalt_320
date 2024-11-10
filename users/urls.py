@@ -17,8 +17,4 @@ urlpatterns = [
     path('visit/<int:pk>/delete/', views.VisitDeleteView.as_view(), name='visit_delete'),
     path('visit/<int:pk>/update/', views.VisitUpdateView.as_view(), name='visit_update'),
     path('create-visit/', views.AdminVisitCreateView.as_view(), name='create_visit'),
-
-
-
-
 ]

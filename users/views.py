@@ -7,12 +7,18 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
 from .forms import VisitUpdateForm, AdminVisitCreateForm
 
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+from django.views import View
+from django.urls import reverse_lazy
+
 CABINET_MENU = [
     {'title': 'Все заявки', 'url': '/cabinet/all-visits/', 'icon': 'bi-list-ul', 'active': False},
-    {'title': 'Создать заявку', 'url': '/cabinet/create-visit/', 'icon': 'bi-plus-circle', 'active': False},  # Новый пункт
+    {'title': 'Создать заявку', 'url': '/cabinet/create-visit/', 'icon': 'bi-plus-circle', 'active': False},
     {'title': 'Новые заявки', 'url': '/cabinet/new-visits/', 'icon': 'bi-bell', 'active': False},
     {'title': 'Архив заявок', 'url': '/cabinet/visit-archive/', 'icon': 'bi-archive', 'active': False},
     {'title': 'Сменить пароль', 'url': '/cabinet/change-password/', 'icon': 'bi-key', 'active': False},
+    {'title': 'Выйти', 'url': '/cabinet/logout/', 'icon': 'bi-box-arrow-right', 'active': False},
 ]
 
 
@@ -34,8 +40,15 @@ class LoginView(BaseLoginView):
     next_page = reverse_lazy('cabinet:new_visits')
     redirect_authenticated_user = True
 
-class LogoutView(BaseLogoutView):
-    next_page = reverse_lazy('main')
+class LogoutView(View):
+    """
+    Мы сознательно заменили спец. вью LogoutView на обычную
+    в рамках эксперимента выхода с сайта через get запрос
+    (по умолнчаию это только через POST происходит в LogoutView)
+    """
+    def get(self, request):
+        logout(request)
+        return redirect(reverse_lazy('main'))
 
 class ProfileVisitsListView(LoginRequiredMixin, ListView):
     model = Visit
