@@ -5,7 +5,7 @@ from django.contrib.auth.views import LogoutView as BaseLogoutView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
-
+from .forms import VisitUpdateForm
 
 CABINET_MENU = [
     {'title': 'Все заявки', 'url': '/cabinet/all-visits/', 'icon': 'bi-list-ul', 'active': False},
@@ -95,3 +95,17 @@ class VisitDeleteView(LoginRequiredMixin, DeleteView):
     
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
+
+class VisitUpdateView(LoginRequiredMixin, UpdateView):
+    model = Visit
+    form_class = VisitUpdateForm
+    template_name = 'visit_update.html'
+    
+    def get_success_url(self):
+        return reverse_lazy('cabinet:visit_detail', kwargs={'pk': self.object.pk})
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(get_cabinet_menu_context(self.request.path))
+        return context
