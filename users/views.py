@@ -13,9 +13,9 @@ from django.views import View
 from django.urls import reverse_lazy
 
 CABINET_MENU = [
-    {'title': 'Все заявки', 'url': '/cabinet/all-visits/', 'icon': 'bi-list-ul', 'active': False},
-    {'title': 'Создать заявку', 'url': '/cabinet/create-visit/', 'icon': 'bi-plus-circle', 'active': False},
     {'title': 'Новые заявки', 'url': '/cabinet/new-visits/', 'icon': 'bi-bell', 'active': False},
+    {'title': 'Подтвержденные заявки', 'url': '/cabinet/all-visits/', 'icon': 'bi-list-ul', 'active': False},
+    {'title': 'Создать заявку', 'url': '/cabinet/create-visit/', 'icon': 'bi-plus-circle', 'active': False},
     {'title': 'Архив заявок', 'url': '/cabinet/visit-archive/', 'icon': 'bi-archive', 'active': False},
     {'title': 'Сменить пароль', 'url': '/cabinet/change-password/', 'icon': 'bi-key', 'active': False},
     {'title': 'Выйти', 'url': '/cabinet/logout/', 'icon': 'bi-box-arrow-right', 'active': False},
@@ -57,13 +57,9 @@ class ProfileVisitsListView(LoginRequiredMixin, ListView):
     context_object_name = 'visits'
     
     def get_queryset(self):
-        # Получаем тип визита из параметров URL
         visit_type = self.kwargs.get('visit_type')
-        
-        # Базовый queryset для всех визитов
         queryset = Visit.objects.all()
         
-        # Фильтрация визитов в зависимости от типа и установка заголовка страницы
         if visit_type == 'new':
             queryset = queryset.filter(status=0)
             self.page_title = 'Новые заявки'
@@ -71,9 +67,11 @@ class ProfileVisitsListView(LoginRequiredMixin, ListView):
             queryset = queryset.filter(status__in=[2, 3])
             self.page_title = 'Архив заявок'
         else:
-            self.page_title = 'Все заявки'
+            queryset = queryset.filter(status=1)
+            self.page_title = 'Подтвержденные заявки'
             
         return queryset
+
     
     def get_context_data(self, **kwargs):
         # Получаем базовый контекст от родительского класса
