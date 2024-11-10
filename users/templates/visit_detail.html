@@ -28,7 +28,9 @@
             <dd class="col-sm-9">{{ visit.name }}</dd>
 
             <dt class="col-sm-3">Телефон:</dt>
-            <dd class="col-sm-9">{{ visit.phone }}</dd>
+            <dd class="col-sm-9">
+                <a href="tel:{{ visit.phone }}" class="text-decoration-none">{{ visit.phone }}</a>
+            </dd>
 
             <dt class="col-sm-3">Дата создания:</dt>
             <dd class="col-sm-9">{{ visit.created_at|date:"d.m.Y H:i" }}</dd>
