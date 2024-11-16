@@ -147,3 +147,11 @@ YOUR_PERSONAL_CHAT_ID = os.getenv("YOUR_PERSONAL_CHAT_ID")
 
 # Новая модель пользователя
 AUTH_USER_MODEL = 'users.CustomUser'
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Название сайта",
+    "site_header": "Название в шапке",
+    "site_brand": "Бренд",
+    "welcome_sign": "Добро пожаловать в админ-панель",
+    "copyright": "Acme Ltd",
+}
