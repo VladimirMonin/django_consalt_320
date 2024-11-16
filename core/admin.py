@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Visit, Master, Service, Review
-
+from django.utils.html import format_html
 class TimeOfDayFilter(admin.SimpleListFilter):
     title = 'Время суток'  # Отображаемое название фильтра
     parameter_name = 'time_of_day'  # URL параметр
@@ -85,18 +85,54 @@ class MasterAdmin(admin.ModelAdmin):
     list_filter = ('services',)  # Фильтрация по услугам
 
 
-@admin.register(Service)
-class ServiceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price',)
-    search_fields = ('name', 'description')
-    
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('author_name', 'text', 'word_count','created_at', 'status')
+    # Определяем поля, которые будут отображаться в списке записей
+    list_display = ('author_name', 'text', 'word_count', 'created_at', 'status', 'show_thumbnail')
+    # Добавляем фильтры для удобной навигации по записям
     list_filter = (WordCountFilter, 'status', 'created_at')
+    # Указываем поля, по которым можно производить поиск
     search_fields = ('author_name', 'text')
+    # Поля, которые можно редактировать прямо в списке записей
     list_editable = ('status',)
+    # Поля, которые нельзя редактировать
+    readonly_fields = ('show_large_photo',)
 
+    # Метод для подсчета количества слов в отзыве
     def word_count(self, obj):
+        """Возвращает количество слов в отзыве."""
         return len(obj.text.split())
     word_count.short_description = 'Всего слов'
+    word_count.admin_order_field = 'text'
+
+    # Метод для отображения миниатюры фотографии в списке записей
+    @admin.display(description='Фото (миниатюра)')
+    def show_thumbnail(self, obj):
+        """Отображает миниатюру фото в списковом представлении."""
+        if obj.photo:
+            return format_html('<img src="{}" height="50" />', obj.photo.url)
+        return "Нет фото"
+
+    # Метод для отображения полноразмерной фотографии в детальном просмотре
+    @admin.display(description='Фото (полный размер)')
+    def show_large_photo(self, obj):
+        """Отображает фото в детальном представлении."""
+        if obj.photo:
+            return format_html('<img src="{}" width="300" />', obj.photo.url)
+        return "Нет фото"
+
+    # Настройка отображения полей в форме редактирования
+    fieldsets = (
+        (None, {
+            'fields': ('author_name', 'text', 'photo', 'show_large_photo', 'status', 'created_at')
+        }),
+    )
+
+    # Определение полей, которые нельзя редактировать
+    readonly_fields = ('show_large_photo', 'created_at')
+
+    # Метод для динамического определения нередактируемых полей
+    def get_readonly_fields(self, request, obj=None):
+        if obj:
+            return self.readonly_fields + ('show_large_photo',)
+        return self.readonly_fields
