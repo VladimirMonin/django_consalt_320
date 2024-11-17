@@ -18,7 +18,7 @@ from django.urls import reverse_lazy
 from django.db.models import Q
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+
 
 MENU = [
     {'title': 'Главная', 'url': '/', 'active': True},
