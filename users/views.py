@@ -3,7 +3,7 @@ from core.models import Visit
 from django.contrib.auth.views import LoginView as BaseLoginView
 from django.contrib.auth.views import LogoutView as BaseLogoutView
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import PasswordChangeView
 from .forms import VisitUpdateForm, AdminVisitCreateForm
 from .forms import BootstrapAuthenticationForm
@@ -119,12 +119,16 @@ class VisitDetailView(LoginRequiredMixin, DetailView):
         context.update(get_cabinet_menu_context(self.request.path))
         return context
 
-class VisitDeleteView(LoginRequiredMixin, DeleteView):
+
+
+class VisitDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Visit
     success_url = reverse_lazy('cabinet:all_visits')
+    permission_required = 'core.delete_visit'
     
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
 
 
 class VisitUpdateView(LoginRequiredMixin, UpdateView):
