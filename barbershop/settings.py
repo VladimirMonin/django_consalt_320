@@ -1,4 +1,5 @@
 from pathlib import Path
+from re import A
 from dotenv import load_dotenv
 import os
 
@@ -16,8 +17,10 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'https://vladimirmonin-django-consalt-320-edfd.twc1.net/', '185.192.247.168', 'https://pydeck.ru/']
 
+
+CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
 
 # Application definition
 
