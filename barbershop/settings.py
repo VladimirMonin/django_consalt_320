@@ -118,7 +118,7 @@ LANGUAGE_CODE = 'ru-ru'
 # TIME_ZONE = 'Asia/Almaty'             # Астана/Алматы (UTC+6)
 
 
-TIME_ZONE = 'Asia/Almaty'
+TIME_ZONE = 'Asia/Yekaterinburg'
 
 USE_I18N = True
 
