@@ -20,7 +20,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'https://vladimirmonin-django-consalt-320-edfd.twc1.net/', '185.192.247.168', 'https://pydeck.ru/']
 
 
-CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
+CSRF_TRUSTED_ORIGINS = ['127.0.0.1', 'localhost', 'https://vladimirmonin-django-consalt-320-edfd.twc1.net/', '185.192.247.168', 'https://pydeck.ru/']
 
 # Application definition
 
