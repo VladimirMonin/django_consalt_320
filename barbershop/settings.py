@@ -18,7 +18,6 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '*',  # Временно для проверки
     'localhost',
     '127.0.0.1',
     '93.183.82.126',
@@ -28,8 +27,6 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://*',  # Временно для проверки
-    'https://*', # Временно для проверки
     'http://localhost',
     'http://127.0.0.1',
     'http://93.183.82.126',
