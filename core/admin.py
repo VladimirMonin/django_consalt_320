@@ -136,3 +136,10 @@ class ReviewAdmin(admin.ModelAdmin):
         if obj:
             return self.readonly_fields + ('show_large_photo',)
         return self.readonly_fields
+    
+
+@admin.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price', 'description')
+    search_fields = ('name', 'description')
+    list_editable = ('price',)
