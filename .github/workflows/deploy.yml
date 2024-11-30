@@ -1,0 +1,49 @@
+# Название workflow для отображения в интерфейсе GitHub
+name: Deploy to VPS
+
+# Триггер - при push в ветку main
+on:
+  push:
+    branches: [ main ]
+
+# Определяем задачи для выполнения
+jobs:
+  deploy:
+    # Указываем операционную систему для runner
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Получаем код из репозитория
+      - uses: actions/checkout@v3
+
+      # Деплоим на сервер через SSH
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@master
+        with:
+          # Используем секреты из GitHub
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          
+          # Команды которые выполнятся на сервере
+          script: |
+            # Переходим в директорию проекта
+            cd /home/v/django_consalt_320
+            
+            # Обновляем код из репозитория
+            git pull
+            
+            # Активируем виртуальное окружение
+            source venv/bin/activate
+            
+            # Обновляем зависимости
+            pip install -r requirements.txt
+            
+            # Создаем файл .env из секретов
+            echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" > .env
+            echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" >> .env
+            echo "YOUR_PERSONAL_CHAT_ID=${{ secrets.YOUR_PERSONAL_CHAT_ID }}" >> .env
+            echo "VSE_GPT_API_KEY=${{ secrets.VSE_GPT_API_KEY }}" >> .env
+            
+            # Перезапускаем systemd сервис
+            sudo systemctl restart django_consalt
