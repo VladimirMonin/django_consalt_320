@@ -1,7 +1,7 @@
-# Название workflow для отображения в интерфейсе GitHub
+# Название нашего workflow для отображения в интерфейсе GitHub
 name: Deploy to VPS
 
-# Триггер - при push в ветку main
+# Указываем когда запускать - при push в main ветку
 on:
   push:
     branches: [ main ]
@@ -9,7 +9,7 @@ on:
 # Определяем задачи для выполнения
 jobs:
   deploy:
-    # Указываем операционную систему для runner
+    # Указываем на какой ОС запускать
     runs-on: ubuntu-latest
     
     steps:
@@ -20,18 +20,18 @@ jobs:
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master
         with:
-          # Используем секреты из GitHub
+          # Используем секреты из GitHub для подключения
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           
-          # Команды которые выполнятся на сервере
+          # Команды выполняемые на сервере
           script: |
             # Переходим в директорию проекта
             cd /home/v/django_consalt_320
             
-            # Обновляем код из репозитория
-            git pull
+            # Обновляем код из репозитория (с sudo и передачей пароля)
+            echo "${{ secrets.PASSWORD }}" | sudo -S git pull
             
             # Активируем виртуальное окружение
             source venv/bin/activate
@@ -39,11 +39,11 @@ jobs:
             # Обновляем зависимости
             pip install -r requirements.txt
             
-            # Создаем файл .env из секретов
+            # Создаем файл .env из отдельных секретов
             echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" > .env
             echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" >> .env
             echo "YOUR_PERSONAL_CHAT_ID=${{ secrets.YOUR_PERSONAL_CHAT_ID }}" >> .env
             echo "VSE_GPT_API_KEY=${{ secrets.VSE_GPT_API_KEY }}" >> .env
             
-            # Перезапускаем systemd сервис
-            sudo systemctl restart django_consalt
+            # Перезапускаем systemd сервис (с sudo и передачей пароля)
+            echo "${{ secrets.PASSWORD }}" | sudo -S systemctl restart django_consalt
